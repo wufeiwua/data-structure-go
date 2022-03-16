@@ -1,6 +1,9 @@
 package list
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type LinkeListNode struct {
 	Item int
@@ -25,10 +28,12 @@ func (list *LinkeList) Insert(element int) {
 	if list.Head == nil {
 		list.Head = node
 		list.Tail = node
+		list.Size += 1
 		return
 	}
 	list.Tail.Next = node
 	list.Tail = node
+	list.Size += 1
 }
 
 func (list *LinkeList) Delete(element int) {
@@ -45,8 +50,24 @@ func (list *LinkeList) Delete(element int) {
 	if node == list.Head {
 		list.Head = node.Next
 		node = nil
+		list.Size -= 1
 		return
 	}
 	// 下移动指针
 	pre.Next = node.Next
+	list.Size -= 1
+}
+
+func (list *LinkeList) Get(index int) (element int, err error) {
+	if index < 0 || index > list.Size-1 {
+		return -1, errors.New("out of index")
+	}
+	node := list.Head
+	for idx := 0; index != idx; idx++ {
+		if node != nil {
+			return node.Item, nil
+		}
+
+	}
+	return -1, errors.New("not found")
 }

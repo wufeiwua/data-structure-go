@@ -24,5 +24,26 @@ func TestLinkedList(t *testing.T) {
 		t.Log(node.Item)
 		node = node.Next
 	}
+	t.Log("size is ", list.Size)
+	num, err := list.Get(-1)
+	if err != nil {
+		t.Log(err.Error())
+	} else {
+		t.Log(num)
+	}
+	num, err = list.Get(10)
+	if err != nil {
+		t.Log(err.Error())
+	} else {
+		t.Log(num)
+	}
+
+	num, err = list.Get(3)
+	if err != nil {
+		t.Log(err.Error())
+	} else {
+		t.Log(num)
+	}
+
 	t.SkipNow()
 }
