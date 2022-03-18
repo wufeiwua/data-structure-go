@@ -2,13 +2,8 @@ package list
 
 import "errors"
 
-type LinkedListNode struct {
-	next  *LinkedListNode
-	Value interface{}
-}
-
 type LinkedList struct {
-	head *LinkedListNode
+	head *SingleNode
 	Size int
 }
 
@@ -19,9 +14,9 @@ func NewLinkedList() *LinkedList {
 	}
 }
 
-func (list *LinkedList) previous(value interface{}) *LinkedListNode {
+func (list *LinkedList) previous(value interface{}) *SingleNode {
 	node := list.head
-	var prev *LinkedListNode = nil
+	var prev *SingleNode = nil
 	for node != nil && node.Value != value {
 		prev = node
 		node = node.next
@@ -29,7 +24,7 @@ func (list *LinkedList) previous(value interface{}) *LinkedListNode {
 	return prev
 }
 
-func (list *LinkedList) last() *LinkedListNode {
+func (list *LinkedList) last() *SingleNode {
 	node := list.head
 	for node != nil && node.next != nil {
 		node = node.next
@@ -38,7 +33,7 @@ func (list *LinkedList) last() *LinkedListNode {
 }
 
 func (list *LinkedList) Insert(value interface{}) {
-	node := &LinkedListNode{next: nil, Value: value}
+	node := &SingleNode{next: nil, Value: value}
 	if list.head == nil {
 		list.head = node
 	} else {

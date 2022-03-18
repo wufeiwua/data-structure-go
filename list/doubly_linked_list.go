@@ -2,14 +2,8 @@ package list
 
 import "errors"
 
-type DoublyLinkedListNode struct {
-	prev  *DoublyLinkedListNode
-	next  *DoublyLinkedListNode
-	Value interface{}
-}
-
 type DoublyLinkedList struct {
-	head *DoublyLinkedListNode
+	head *DoublyNode
 	Size int
 }
 
@@ -21,7 +15,7 @@ func NewDoublyLinkedList() *DoublyLinkedList {
 }
 
 func (list *DoublyLinkedList) Insert(value interface{}) {
-	node := &DoublyLinkedListNode{
+	node := &DoublyNode{
 		prev:  nil,
 		next:  nil,
 		Value: value,
@@ -84,7 +78,7 @@ func (list *DoublyLinkedList) Find(value interface{}) (int, error) {
 	return idx, nil
 }
 
-func (list *DoublyLinkedList) last() *DoublyLinkedListNode {
+func (list *DoublyLinkedList) last() *DoublyNode {
 	node := list.head
 	for node != nil && node.next != nil {
 		node = node.next
