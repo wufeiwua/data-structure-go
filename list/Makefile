@@ -1,3 +1,3 @@
 .PHONY: test
 test: 
-	go test -v linked_list.go list_test.go
+	go test -v list_test.go linked_list.go doubly_linked_list.go
