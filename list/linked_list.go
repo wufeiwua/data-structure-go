@@ -2,13 +2,13 @@ package list
 
 import "errors"
 
-type linkedListNode struct {
-	next  *linkedListNode
+type LinkedListNode struct {
+	next  *LinkedListNode
 	Value interface{}
 }
 
 type LinkedList struct {
-	head *linkedListNode
+	head *LinkedListNode
 	Size int
 }
 
@@ -19,9 +19,9 @@ func NewLinkedList() *LinkedList {
 	}
 }
 
-func (list *LinkedList) findPrevious(value interface{}) *linkedListNode {
+func (list *LinkedList) previous(value interface{}) *LinkedListNode {
 	node := list.head
-	var prev *linkedListNode = nil
+	var prev *LinkedListNode = nil
 	for node != nil && node.Value != value {
 		prev = node
 		node = node.next
@@ -29,7 +29,7 @@ func (list *LinkedList) findPrevious(value interface{}) *linkedListNode {
 	return prev
 }
 
-func (list *LinkedList) getLast() *linkedListNode {
+func (list *LinkedList) last() *LinkedListNode {
 	node := list.head
 	for node != nil && node.next != nil {
 		node = node.next
@@ -38,18 +38,18 @@ func (list *LinkedList) getLast() *linkedListNode {
 }
 
 func (list *LinkedList) Insert(value interface{}) {
-	node := &linkedListNode{next: nil, Value: value}
+	node := &LinkedListNode{next: nil, Value: value}
 	if list.head == nil {
 		list.head = node
 	} else {
-		last := list.getLast()
+		last := list.last()
 		last.next = node
 	}
 	list.Size++
 }
 
 func (list *LinkedList) Delete(value interface{}) {
-	prev := list.findPrevious(value)
+	prev := list.previous(value)
 	// the node is the head
 	if prev == nil {
 		head := list.head
