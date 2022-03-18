@@ -6,6 +6,7 @@ type BinarySearchTree struct {
 
 func NewBinarySearchTree() *BinarySearchTree {
 	tree := &BinarySearchTree{}
+	tree.BinaryTree = NewBinaryTree()
 	tree.root = nil
 	return tree
 }
