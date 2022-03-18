@@ -49,6 +49,7 @@ func (list *DoublyLinkedList) Delete(value interface{}) {
 		node.prev.next = node.next
 		node.next.prev = node.prev
 	}
+	list.Size--
 }
 
 func (list *DoublyLinkedList) Get(index int) (interface{}, error) {
