@@ -1,73 +1,96 @@
 package list
 
-import (
-	"errors"
-	"fmt"
-)
+import "errors"
 
-type LinkeListNode struct {
-	Item int
-	Next *LinkeListNode
+type linkedListNode struct {
+	next  *linkedListNode
+	Value interface{}
 }
 
-type LinkeList struct {
-	Head *LinkeListNode
-	Tail *LinkeListNode
+type LinkedList struct {
+	head *linkedListNode
 	Size int
 }
 
-func (list *LinkeList) New() {
-	list.Head = nil
-	list.Tail = nil
-	list.Size = 0
-}
-
-func (list *LinkeList) Insert(element int) {
-	node := new(LinkeListNode)
-	node.Item = element
-	if list.Head == nil {
-		list.Head = node
-		list.Tail = node
-		list.Size += 1
-		return
+func NewLinkedList() *LinkedList {
+	return &LinkedList{
+		head: nil,
+		Size: 0,
 	}
-	list.Tail.Next = node
-	list.Tail = node
-	list.Size += 1
 }
 
-func (list *LinkeList) Delete(element int) {
-	pre := list.Head
-	node := list.Head
-	for node != nil && node.Item != element {
-		pre = node
-		node = node.Next
+func (list *LinkedList) findPrevious(value interface{}) *linkedListNode {
+	node := list.head
+	var prev *linkedListNode = nil
+	for node != nil && node.Value != value {
+		prev = node
+		node = node.next
+	}
+	return prev
+}
+
+func (list *LinkedList) getLast() *linkedListNode {
+	node := list.head
+	for node != nil && node.next != nil {
+		node = node.next
+	}
+	return node
+}
+
+func (list *LinkedList) Insert(value interface{}) {
+	node := &linkedListNode{next: nil, Value: value}
+	if list.head == nil {
+		list.head = node
+	} else {
+		last := list.getLast()
+		last.next = node
+	}
+	list.Size++
+}
+
+func (list *LinkedList) Delete(value interface{}) {
+	prev := list.findPrevious(value)
+	// the node is the head
+	if prev == nil {
+		head := list.head
+		list.head = head.next
+		head = nil
+	} else {
+		node := prev.next
+		if node == nil {
+			// the node is the empty, prev node is the last
+			// do nothing
+			return
+		}
+		prev.next = node.next
+		node = nil
+	}
+	list.Size--
+}
+
+func (list *LinkedList) Get(index int) (interface{}, error) {
+	node, idx := list.head, 0
+	if index < 0 || index > list.Size-1 {
+		return nil, errors.New("out of index")
+	}
+	for node != nil && idx != index {
+		idx++
+		node = node.next
 	}
 	if node == nil {
-		fmt.Println("cannot delete, element is not existd.")
-		return
+		return nil, errors.New("node is nil")
 	}
-	if node == list.Head {
-		list.Head = node.Next
-		node = nil
-		list.Size -= 1
-		return
-	}
-	// 下移动指针
-	pre.Next = node.Next
-	list.Size -= 1
+	return node.Value, nil
 }
 
-func (list *LinkeList) Get(index int) (element int, err error) {
-	if index < 0 || index > list.Size-1 {
-		return -1, errors.New("out of index")
+func (list *LinkedList) Find(value interface{}) (int, error) {
+	node, idx := list.head, 0
+	for node != nil && node.Value != value {
+		idx++
+		node = node.next
 	}
-	node := list.Head
-	for idx := 0; index != idx; idx++ {
-		if node != nil {
-			return node.Item, nil
-		}
-
+	if node == nil {
+		return -1, errors.New("cannot find it")
 	}
-	return -1, errors.New("not found")
+	return idx, nil
 }
